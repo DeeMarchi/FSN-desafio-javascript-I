@@ -1,3 +1,6 @@
+const LINHA_DE_DIVISAO = "----------------------------------------";
+const LINHA_DE_CURSOS = "++++++++++++++++++++++++++++++++++++++++";
+
 // Base a ser utilizada
 const alunosDaEscola = [{
 		nome: "Henrique",
@@ -32,9 +35,44 @@ const alunosDaEscola = [{
 
 // implementação
 
+const formatarData = data => {
+	return `${data.getDate()}/${data.getMonth() + 1}/${data.getFullYear()}`
+};
+
 const listarAlunos = listaDeAlunos => {
-	listaDeAlunos.forEach((aluno) => {
-		console.log(aluno);
+
+	const formatarNotas = listaDeNotas => {
+		let conteudo = "";
+
+		listaDeNotas.forEach((nota, i) => {
+			conteudo += `Nota do período (${i + 1}): ${nota}\n`;
+		});
+
+		return conteudo;
+	};
+
+	listaDeAlunos.forEach(aluno => {
+		console.log(aluno.nome);
+		console.log(LINHA_DE_DIVISAO);
+		if (aluno.cursos.length > 0) {
+			aluno.cursos.forEach(curso => {
+				console.log(LINHA_DE_CURSOS);
+				console.log(`Curso: ${curso.nomeDoCurso.toUpperCase()}`);
+				console.log(`Data de matrícula: ${formatarData(curso.dataMatricula)}`);
+				if (curso.notas.length > 0) {
+					console.log("Notas:");
+					console.log(formatarNotas(curso.notas));
+				} else {
+					console.log("O aluno ainda não recebeu nenhuma nota no curso");
+				}
+				console.log(`Faltas: ${curso.faltas}`);
+				console.log(LINHA_DE_CURSOS);
+			});
+		} else {
+			console.log(LINHA_DE_CURSOS);
+			console.log(`${aluno.nome} ainda não está matriculado em nenhum curso`);
+			console.log(LINHA_DE_CURSOS);
+		}
 	});
 };
 
