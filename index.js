@@ -71,10 +71,21 @@ const listarAlunos = listaDeAlunos => {
 	});
 };
 
+const buscarAluno = nomeAluno => {
+	for (const aluno of alunosDaEscola) {
+		if (aluno.nome.toUpperCase() === nomeAluno.toUpperCase()) {
+			console.log(`Encontramos o aluno ${nomeAluno} em nosso sistema!`);
+			return aluno;
+		}
+	}
+	console.log(`Não encontramos nenhum aluno com o nome ${nomeAluno}`);
+	return null;
+};
+
 const adicionarAluno = alunoNovo => {
 	let mensagemDeStatus = "";
 
-	if (!alunosDaEscola.find(alunoNoSistema => alunoNoSistema.nome.toUpperCase() === alunoNovo.toUpperCase())) {
+	if (!buscarAluno(alunoNovo)) {
 		alunosDaEscola.push({
 			nome: alunoNovo,
 			cursos: [],
