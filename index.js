@@ -94,6 +94,7 @@ const buscarAluno = nomeAluno => {
 };
 
 const adicionarAluno = alunoNovo => {
+	const prefixoErro = "Erro ao adicionar aluno:";
 	let mensagemDeStatus = "";
 
 	if (!buscarAluno(alunoNovo)) {
@@ -103,7 +104,7 @@ const adicionarAluno = alunoNovo => {
 		});
 		mensagemDeStatus = `Aluno ${alunoNovo} cadastrado com sucesso!`;
 	} else {
-		mensagemDeStatus = `O aluno ${alunoNovo} já está cadastrado no sistema`;
+		mensagemDeStatus = `${prefixoErro} O aluno ${alunoNovo} já está cadastrado no sistema`;
 	}
 	console.log(mensagemDeStatus);
 };
@@ -163,12 +164,43 @@ const aplicarNota = (aluno, curso, nota) => {
 	console.log(mensagemDeStatus);
 };
 
-// adicionarAluno("Henrique");
-// listarAlunos(alunosDaEscola);
-// adicionarAluno("Daniel");
-// listarAlunos(alunosDaEscola);
-// matricularAluno("Lucca", "Full Stack");
-// listarAlunos(alunosDaEscola);
+const calcularMedia = listaDeNotas => {
+	const numeroDeNotas = listaDeNotas.length;
+	const soma = listaDeNotas.reduce((acc, cur) => acc + cur)
+	return soma / numeroDeNotas;
+};
+
+const aprovarAluno = (aluno, curso) => {
+	const alunoNoSistema = buscarAluno(aluno);
+	const cursoNoSistema = buscarCurso(curso, alunoNoSistema.cursos);
+	const prefixoErro = `Erro ao aprovar o aluno:`;
+	let mensagemDeStatus = "";
+
+	if (alunoNoSistema && cursoNoSistema) {
+		if ((calcularMedia(cursoNoSistema.notas) >= 7) && (cursoNoSistema.faltas <= 3)) {
+			mensagemDeStatus = `O aluno ${aluno} foi APROVADO! no curso de ${curso}`;
+		} else {
+			mensagemDeStatus = `O aluno ${aluno} REPROVOU no curso de ${curso}`;
+		}
+	} else {
+		mensagemDeStatus = `${prefixoErro} curso ou aluno não existem`;
+	}
+	console.log(mensagemDeStatus);
+};
+
+// testes
+adicionarAluno("Henrique");
+listarAlunos(alunosDaEscola);
+adicionarAluno("Daniel");
+listarAlunos(alunosDaEscola);
+matricularAluno("Lucca", "Full Stack");
+listarAlunos(alunosDaEscola);
+aplicarFalta("Lucca", "ux");
 aplicarFalta("Lucca", "ux");
 aplicarNota("lucca", "ux", 10);
 listarAlunos(alunosDaEscola);
+console.log(calcularMedia(alunosDaEscola.find(aluno => aluno.nome === "Lucca").cursos[0].notas));
+aprovarAluno("lucca", "ux");
+aplicarFalta("Lucca", "ux");
+aplicarFalta("Lucca", "ux");
+aprovarAluno("lucca", "ux");
