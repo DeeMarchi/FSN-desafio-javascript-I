@@ -47,7 +47,6 @@ const exibirNotas = listaDeNotas => {
 };
 
 const exibirInfoDoCurso = curso => {
-	
 	console.log(LINHA_DE_CURSOS);
 	console.log(`Curso: ${curso.nomeDoCurso.toUpperCase()}`);
 	console.log(`Data de matrícula: ${utils.formatarData(curso.dataMatricula)}`);
@@ -57,7 +56,6 @@ const exibirInfoDoCurso = curso => {
 };
 
 const listarAlunos = listaDeAlunos => {
-
 	listaDeAlunos.forEach(aluno => {
 		console.log("\n" + aluno.nome);
 		console.log(LINHA_DE_DIVISAO);
@@ -76,7 +74,7 @@ const listarAlunos = listaDeAlunos => {
 const adicionarAluno = alunoNovo => {
 	let mensagemDeStatus = "";
 
-	if (!alunosDaEscola.find(alunoNoSistema => alunoNoSistema.nome === alunoNovo )) {
+	if (!alunosDaEscola.find(alunoNoSistema => alunoNoSistema.nome.toUpperCase() === alunoNovo.toUpperCase())) {
 		alunosDaEscola.push({
 			nome: alunoNovo,
 			cursos: [],
