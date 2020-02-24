@@ -32,7 +32,7 @@ const alunosDaEscola = [{
 			notas: [8.1, 7.8, 9.5],
 			faltas: 0,
 		}],
-	}
+	},
 ];
 
 // implementação
@@ -71,6 +71,17 @@ const listarAlunos = listaDeAlunos => {
 	});
 };
 
+const buscarCurso = (cursoParaProcurar, listaDeCursos) => {
+	for (const curso of listaDeCursos) {
+		if (curso.nomeDoCurso.toUpperCase() === cursoParaProcurar.toUpperCase()) {
+			console.log(`Encontramos o curso ${cursoParaProcurar} nesta lista`);
+			return curso;
+		}
+	}
+	console.log(`Não Encontramos o curso ${cursoParaProcurar} nesta lista`);
+	return null;
+};
+
 const buscarAluno = nomeAluno => {
 	for (const aluno of alunosDaEscola) {
 		if (aluno.nome.toUpperCase() === nomeAluno.toUpperCase()) {
@@ -97,7 +108,67 @@ const adicionarAluno = alunoNovo => {
 	console.log(mensagemDeStatus);
 };
 
-adicionarAluno("Henrique");
-listarAlunos(alunosDaEscola);
-adicionarAluno("Daniel");
+const matricularAluno = (aluno, curso) => {
+	const alunoNoSistema = buscarAluno(aluno);
+	const prefixoErro = "Erro ao matricular:";
+	let mensagemDeStatus = "";
+
+	if (alunoNoSistema) {
+		if (!buscarCurso(curso, alunoNoSistema.cursos)) {
+			const dataAtual = new Date();
+
+			alunoNoSistema.cursos.push({
+				nomeDoCurso: curso,
+				dataMatricula: dataAtual,
+				notas: [],
+				faltas: 0,
+			});
+			mensagemDeStatus = `Aluno ${aluno} foi matriculo no curso de ${curso} com sucesso!`;
+		} else {
+			mensagemDeStatus = `${prefixoErro} O aluno ${aluno} JÁ está no curso de ${curso}`;
+		}
+	} else {
+		mensagemDeStatus = `${prefixoErro} O aluno ${aluno} NÃO existe`;
+	}
+	console.log(mensagemDeStatus);
+};
+
+const aplicarFalta = (aluno, curso) => {
+	const alunoNoSistema = buscarAluno(aluno);
+	const cursoNoSistema = buscarCurso(curso, alunoNoSistema.cursos);
+	const prefixoErro = `Erro ao dar falta:`;
+	let mensagemDeStatus = "";
+
+	if (cursoNoSistema && alunoNoSistema) {
+		++cursoNoSistema.faltas;
+		mensagemDeStatus = `Uma falta foi dada à ${aluno} no curso de ${curso}`
+	} else {
+		mensagemDeStatus = `${prefixoErro} curso ou aluno não existem`;
+	}
+	console.log(mensagemDeStatus);
+};
+
+const aplicarNota = (aluno, curso, nota) => {
+	const alunoNoSistema = buscarAluno(aluno);
+	const cursoNoSistema = buscarCurso(curso, alunoNoSistema.cursos);
+	const prefixoErro = `Erro ao dar nota:`;
+	let mensagemDeStatus = "";
+
+	if (cursoNoSistema && alunoNoSistema && nota) {
+		cursoNoSistema.notas.push(nota);
+		mensagemDeStatus = `Uma nota foi dada à ${aluno} no curso de ${curso}`
+	} else {
+		mensagemDeStatus = `${prefixoErro} curso ou aluno não existem ou nota não foi especificada`;
+	}
+	console.log(mensagemDeStatus);
+};
+
+// adicionarAluno("Henrique");
+// listarAlunos(alunosDaEscola);
+// adicionarAluno("Daniel");
+// listarAlunos(alunosDaEscola);
+// matricularAluno("Lucca", "Full Stack");
+// listarAlunos(alunosDaEscola);
+aplicarFalta("Lucca", "ux");
+aplicarNota("lucca", "ux", 10);
 listarAlunos(alunosDaEscola);
